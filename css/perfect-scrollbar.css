@@ -22,18 +22,17 @@
   bottom: 0px;
   /* please don't change 'position' */
   position: absolute;
+  top:0;
+  will-change: transform;
 }
 
 .ps__rail-y {
-  display: none;
-  opacity: 0;
+  display: block;
   transition: background-color .2s linear, opacity .2s linear;
   -webkit-transition: background-color .2s linear, opacity .2s linear;
-  width: 15px;
-  /* there must be 'right' or 'left' for ps__rail-y */
-  right: 0;
-  /* please don't change 'position' */
-  position: absolute;
+  height: 100%;
+  width: 100%;
+ 
 }
 
 .ps--active-x > .ps__rail-x,
@@ -74,6 +73,8 @@
   bottom: 2px;
   /* please don't change 'position' */
   position: absolute;
+  top:0;
+  will-change: transform;
 }
 
 .ps__thumb-y {
@@ -86,6 +87,17 @@
   right: 2px;
   /* please don't change 'position' */
   position: absolute;
+  top:0;
+  height:2px;
+  will-change: transform;
+}
+
+#scroller{
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 15px;
 }
 
 .ps__rail-x:hover > .ps__thumb-x,

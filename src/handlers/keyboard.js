@@ -5,9 +5,9 @@ import { isEditable } from '../lib/util';
 export default function(i) {
   const element = i.element;
 
-  const elementHovered = () => DOM.matches(element, ':hover');
-  const scrollbarFocused = () =>
-    DOM.matches(i.scrollbarX, ':focus') || DOM.matches(i.scrollbarY, ':focus');
+  // const elementHovered = () => DOM.matches(element, ':hover');
+  // const scrollbarFocused = () =>
+  //   DOM.matches(i.scrollbarX, ':focus') || DOM.matches(i.scrollbarY, ':focus');
 
   function shouldPreventDefault(deltaX, deltaY) {
     const scrollTop = Math.floor(element.scrollTop);
@@ -46,9 +46,9 @@ export default function(i) {
       return;
     }
 
-    if (!elementHovered() && !scrollbarFocused()) {
-      return;
-    }
+    // if (!elementHovered() && !scrollbarFocused()) {
+    //   return;
+    // }
 
     let activeElement = document.activeElement
       ? document.activeElement

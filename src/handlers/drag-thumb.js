@@ -93,10 +93,10 @@ function bindMouseScrollHandler(
     e.stopPropagation();
   }
 
-  i.event.bind(i[scrollbarY], 'mousedown', e => {
-    bindMoves(e);
-  });
-  i.event.bind(i[scrollbarY], 'touchstart', e => {
-    bindMoves(e, true);
-  });
+  // i.event.bind(i[scrollbarY], 'mousedown', e => {
+  //   bindMoves(e);
+  // });
+  // i.event.bind(i[scrollbarY], 'touchstart', e => {
+  //   bindMoves(e, true);
+  // });
 }

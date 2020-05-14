@@ -11,14 +11,31 @@ function get(element) {
 }
 
 function set(element, obj) {
+  
   for (var key in obj) {
     var val = obj[key];
     if (typeof val === 'number') {
       val = val + "px";
     }
-    element.style[key] = val;
+
+    if(key==='top'){
+      var translate = 'translate3d(0, '+val+', 0)';
+      console.log(translate);
+      setWebkits(element, translate);
+    }else{
+      element.style[key] = val;
+    }
   }
   return element;
+}
+
+
+function setWebkits(element,transform){
+  element.style.webkitTransform = transform;
+element.style.MozTransform = transform;
+element.style.msTransform = transform;
+element.style.OTransform = transform;
+element.style.transform = transform;
 }
 
 function div(className) {
@@ -50,11 +67,6 @@ function remove(element) {
       element.parentNode.removeChild(element);
     }
   }
-}
-
-function queryChildren(element, selector) {
-  return Array.prototype.filter.call(element.children, function (child) { return matches(child, selector); }
-  );
 }
 
 var cls = {
@@ -247,6 +259,7 @@ function processScrollDiff$1(
 
   var element = i.element;
 
+  console.log([contentHeight, containerHeight, scrollTop, y, up, down]);
   // reset reach
   i.reach[y] = null;
 
@@ -325,23 +338,26 @@ function updateGeometry(i) {
   var roundedScrollTop = Math.floor(element.scrollTop);
   var rect = element.getBoundingClientRect();
 
-  i.containerWidth = Math.ceil(rect.width);
-  i.containerHeight = Math.ceil(rect.height);
+  i.containerWidth = Math.round(rect.width);
+  i.containerHeight = Math.round(rect.height);
+
   i.contentWidth = element.scrollWidth;
   i.contentHeight = element.scrollHeight;
 
-  if (!element.contains(i.scrollbarXRail)) {
-    // clean up and append
-    queryChildren(element, cls.element.rail('x')).forEach(function (el) { return remove(el); }
-    );
-    element.appendChild(i.scrollbarXRail);
-  }
-  if (!element.contains(i.scrollbarYRail)) {
-    // clean up and append
-    queryChildren(element, cls.element.rail('y')).forEach(function (el) { return remove(el); }
-    );
-    element.appendChild(i.scrollbarYRail);
-  }
+  // if (!element.contains(i.scrollbarXRail)) {
+  //   // clean up and append
+  //   DOM.queryChildren(element, cls.element.rail('x')).forEach(el =>
+  //     DOM.remove(el)
+  //   );
+  //   element.appendChild(i.scrollbarXRail);
+  // }
+  // if (!element.contains(i.scrollbarYRail)) {
+  //   // clean up and append
+  //   DOM.queryChildren(element, cls.element.rail('y')).forEach(el =>
+  //     DOM.remove(el)
+  //   );
+  //   element.appendChild(i.scrollbarYRail);
+  // }
 
   if (
     !i.settings.suppressScrollX &&
@@ -393,12 +409,13 @@ function updateGeometry(i) {
 
   if (i.scrollbarXActive) {
     element.classList.add(cls.state.active('x'));
-  } else {
-    element.classList.remove(cls.state.active('x'));
-    i.scrollbarXWidth = 0;
-    i.scrollbarXLeft = 0;
-    element.scrollLeft = i.isRtl === true ? i.contentWidth : 0;
-  }
+  } 
+  // else {
+  //   element.classList.remove(cls.state.active('x'));
+  //   i.scrollbarXWidth = 0;
+  //   i.scrollbarXLeft = 0;
+  //   element.scrollLeft = i.isRtl === true ? i.contentWidth : 0;
+  // }
   if (i.scrollbarYActive) {
     element.classList.add(cls.state.active('y'));
   } else {
@@ -420,59 +437,41 @@ function getThumbSize(i, thumbSize) {
 }
 
 function updateCss(element, i) {
-  var xRailOffset = { width: i.railXWidth };
+//  const xRailOffset = { width: i.railXWidth };
   var roundedScrollTop = Math.floor(element.scrollTop);
+  // if (i.isScrollbarYUsingRight) {
+  //   if (i.isRtl) {
+  //     yRailOffset.right =
+  //       i.contentWidth -
+  //       (i.negativeScrollAdjustment + element.scrollLeft) -
+  //       i.scrollbarYRight -
+  //       i.scrollbarYOuterWidth -
+  //       9;
+  //   } else {
+  //     yRailOffset.right = i.scrollbarYRight - element.scrollLeft;
+  //   }
+  // } else {
+  //   if (i.isRtl) {
+  //     yRailOffset.left =
+  //       i.negativeScrollAdjustment +
+  //       element.scrollLeft +
+  //       i.containerWidth * 2 -
+  //       i.contentWidth -
+  //       i.scrollbarYLeft -
+  //       i.scrollbarYOuterWidth;
+  //   } else {
+  //     yRailOffset.left = i.scrollbarYLeft + element.scrollLeft;
+  //   }
+  // }
+ // CSS.set(i.scrollbarYRail, yRailOffset);
 
-  if (i.isRtl) {
-    xRailOffset.left =
-      i.negativeScrollAdjustment +
-      element.scrollLeft +
-      i.containerWidth -
-      i.contentWidth;
-  } else {
-    xRailOffset.left = element.scrollLeft;
-  }
-  if (i.isScrollbarXUsingBottom) {
-    xRailOffset.bottom = i.scrollbarXBottom - roundedScrollTop;
-  } else {
-    xRailOffset.top = i.scrollbarXTop + roundedScrollTop;
-  }
-  set(i.scrollbarXRail, xRailOffset);
-
-  var yRailOffset = { top: roundedScrollTop, height: i.railYHeight };
-  if (i.isScrollbarYUsingRight) {
-    if (i.isRtl) {
-      yRailOffset.right =
-        i.contentWidth -
-        (i.negativeScrollAdjustment + element.scrollLeft) -
-        i.scrollbarYRight -
-        i.scrollbarYOuterWidth -
-        9;
-    } else {
-      yRailOffset.right = i.scrollbarYRight - element.scrollLeft;
-    }
-  } else {
-    if (i.isRtl) {
-      yRailOffset.left =
-        i.negativeScrollAdjustment +
-        element.scrollLeft +
-        i.containerWidth * 2 -
-        i.contentWidth -
-        i.scrollbarYLeft -
-        i.scrollbarYOuterWidth;
-    } else {
-      yRailOffset.left = i.scrollbarYLeft + element.scrollLeft;
-    }
-  }
-  set(i.scrollbarYRail, yRailOffset);
-
-  set(i.scrollbarX, {
-    left: i.scrollbarXLeft,
-    width: i.scrollbarXWidth - i.railBorderXWidth,
-  });
+  // CSS.set(i.scrollbarX, {
+  //   left: i.scrollbarXLeft,
+  //   width: i.scrollbarXWidth - i.railBorderXWidth,
+  // });
   set(i.scrollbarY, {
     top: i.scrollbarYTop,
-    height: i.scrollbarYHeight - i.railBorderYWidth,
+    //height: i.scrollbarYHeight - i.railBorderYWidth,
   });
 }
 
@@ -493,19 +492,19 @@ function clickRail(i) {
     e.stopPropagation();
   });
 
-  i.event.bind(i.scrollbarX, 'mousedown', function (e) { return e.stopPropagation(); });
-  i.event.bind(i.scrollbarXRail, 'mousedown', function (e) {
-    var positionLeft =
-      e.pageX -
-      window.pageXOffset -
-      i.scrollbarXRail.getBoundingClientRect().left;
-    var direction = positionLeft > i.scrollbarXLeft ? 1 : -1;
+  // i.event.bind(i.scrollbarX, 'mousedown', e => e.stopPropagation());
+  // i.event.bind(i.scrollbarXRail, 'mousedown', e => {
+  //   const positionLeft =
+  //     e.pageX -
+  //     window.pageXOffset -
+  //     i.scrollbarXRail.getBoundingClientRect().left;
+  //   const direction = positionLeft > i.scrollbarXLeft ? 1 : -1;
 
-    i.element.scrollLeft += direction * i.containerWidth;
-    updateGeometry(i);
+  //   i.element.scrollLeft += direction * i.containerWidth;
+  //   updateGeometry(i);
 
-    e.stopPropagation();
-  });
+  //   e.stopPropagation();
+  // });
 }
 
 function dragThumb(i) {
@@ -547,64 +546,20 @@ function bindMouseScrollHandler(
 
   var element = i.element;
 
-  var startingScrollTop = null;
-  var startingMousePageY = null;
-  var scrollBy = null;
-
-  function mouseMoveHandler(e) {
-    if (e.touches && e.touches[0]) {
-      e[pageY] = e.touches[0].pageY;
-    }
-    element[scrollTop] =
-      startingScrollTop + scrollBy * (e[pageY] - startingMousePageY);
-    addScrollingClass(i, y);
-    updateGeometry(i);
-
-    e.stopPropagation();
-    e.preventDefault();
-  }
-
-  function mouseUpHandler() {
-    removeScrollingClass(i, y);
-    i[scrollbarYRail].classList.remove(cls.state.clicking);
-    i.event.unbind(i.ownerDocument, 'mousemove', mouseMoveHandler);
-  }
-
-  function bindMoves(e, touchMode) {
-    startingScrollTop = element[scrollTop];
-    if (touchMode && e.touches) {
-      e[pageY] = e.touches[0].pageY;
-    }
-    startingMousePageY = e[pageY];
-    scrollBy =
-      (i[contentHeight] - i[containerHeight]) /
-      (i[railYHeight] - i[scrollbarYHeight]);
-    if (!touchMode) {
-      i.event.bind(i.ownerDocument, 'mousemove', mouseMoveHandler);
-      i.event.once(i.ownerDocument, 'mouseup', mouseUpHandler);
-      e.preventDefault();
-    } else {
-      i.event.bind(i.ownerDocument, 'touchmove', mouseMoveHandler);
-    }
-
-    i[scrollbarYRail].classList.add(cls.state.clicking);
-
-    e.stopPropagation();
-  }
-
-  i.event.bind(i[scrollbarY], 'mousedown', function (e) {
-    bindMoves(e);
-  });
-  i.event.bind(i[scrollbarY], 'touchstart', function (e) {
-    bindMoves(e, true);
-  });
+  // i.event.bind(i[scrollbarY], 'mousedown', e => {
+  //   bindMoves(e);
+  // });
+  // i.event.bind(i[scrollbarY], 'touchstart', e => {
+  //   bindMoves(e, true);
+  // });
 }
 
 function keyboard(i) {
   var element = i.element;
 
-  var elementHovered = function () { return matches(element, ':hover'); };
-  var scrollbarFocused = function () { return matches(i.scrollbarX, ':focus') || matches(i.scrollbarY, ':focus'); };
+  // const elementHovered = () => DOM.matches(element, ':hover');
+  // const scrollbarFocused = () =>
+  //   DOM.matches(i.scrollbarX, ':focus') || DOM.matches(i.scrollbarY, ':focus');
 
   function shouldPreventDefault(deltaX, deltaY) {
     var scrollTop = Math.floor(element.scrollTop);
@@ -643,9 +598,9 @@ function keyboard(i) {
       return;
     }
 
-    if (!elementHovered() && !scrollbarFocused()) {
-      return;
-    }
+    // if (!elementHovered() && !scrollbarFocused()) {
+    //   return;
+    // }
 
     var activeElement = document.activeElement
       ? document.activeElement
@@ -748,6 +703,7 @@ function wheel(i) {
   var element = i.element;
 
   function shouldPreventDefault(deltaX, deltaY) {
+    
     var roundedScrollTop = Math.floor(element.scrollTop);
     var isTop = element.scrollTop === 0;
     var isBottom =
@@ -1179,36 +1135,37 @@ var PerfectScrollbar = function PerfectScrollbar(element, userSettings) {
   this.event = new EventManager();
   this.ownerDocument = element.ownerDocument || document;
 
-  this.scrollbarXRail = div(cls.element.rail('x'));
-  element.appendChild(this.scrollbarXRail);
-  this.scrollbarX = div(cls.element.thumb('x'));
-  this.scrollbarXRail.appendChild(this.scrollbarX);
-  this.scrollbarX.setAttribute('tabindex', 0);
-  this.event.bind(this.scrollbarX, 'focus', focus);
-  this.event.bind(this.scrollbarX, 'blur', blur);
-  this.scrollbarXActive = null;
-  this.scrollbarXWidth = null;
-  this.scrollbarXLeft = null;
-  var railXStyle = get(this.scrollbarXRail);
-  this.scrollbarXBottom = parseInt(railXStyle.bottom, 10);
-  if (isNaN(this.scrollbarXBottom)) {
-    this.isScrollbarXUsingBottom = false;
-    this.scrollbarXTop = toInt(railXStyle.top);
-  } else {
-    this.isScrollbarXUsingBottom = true;
-  }
-  this.railBorderXWidth =
-    toInt(railXStyle.borderLeftWidth) + toInt(railXStyle.borderRightWidth);
-  // Set rail to display:block to calculate margins
-  set(this.scrollbarXRail, { display: 'block' });
-  this.railXMarginWidth =
-    toInt(railXStyle.marginLeft) + toInt(railXStyle.marginRight);
-  set(this.scrollbarXRail, { display: '' });
-  this.railXWidth = null;
-  this.railXRatio = null;
+  // this.scrollbarXRail = DOM.div(cls.element.rail('x'));
+  // element.appendChild(this.scrollbarXRail);
+  // this.scrollbarX = DOM.div(cls.element.thumb('x'));
+  // this.scrollbarXRail.appendChild(this.scrollbarX);
+  // this.scrollbarX.setAttribute('tabindex', 0);
+  // this.event.bind(this.scrollbarX, 'focus', focus);
+  // this.event.bind(this.scrollbarX, 'blur', blur);
+  // this.scrollbarXActive = null;
+  // this.scrollbarXWidth = null;
+  // this.scrollbarXLeft = null;
+  // const railXStyle = CSS.get(this.scrollbarXRail);
+  // this.scrollbarXBottom = parseInt(railXStyle.bottom, 10);
+  // if (isNaN(this.scrollbarXBottom)) {
+  // this.isScrollbarXUsingBottom = false;
+  // this.scrollbarXTop = toInt(railXStyle.top);
+  // } else {
+  // this.isScrollbarXUsingBottom = true;
+  // }
+  // this.railBorderXWidth =
+  // toInt(railXStyle.borderLeftWidth) + toInt(railXStyle.borderRightWidth);
+  // // Set rail to display:block to calculate margins
+  // CSS.set(this.scrollbarXRail, { display: 'block' });
+  // this.railXMarginWidth =
+  // toInt(railXStyle.marginLeft) + toInt(railXStyle.marginRight);
+  // CSS.set(this.scrollbarXRail, { display: '' });
+  // this.railXWidth = null;
+  // this.railXRatio = null;
 
   this.scrollbarYRail = div(cls.element.rail('y'));
-  element.appendChild(this.scrollbarYRail);
+ // element.appendChild(this.scrollbarYRail);
+ document.querySelector('#scroller').appendChild(this.scrollbarYRail);
   this.scrollbarY = div(cls.element.thumb('y'));
   this.scrollbarYRail.appendChild(this.scrollbarY);
   this.scrollbarY.setAttribute('tabindex', 0);
@@ -1299,15 +1256,15 @@ PerfectScrollbar.prototype.onScroll = function onScroll (e) {
   }
 
   updateGeometry(this);
-  processScrollDiff(this, 'top', this.element.scrollTop - this.lastScrollTop);
-  processScrollDiff(
-    this,
-    'left',
-    this.element.scrollLeft - this.lastScrollLeft
-  );
+ // processScrollDiff(this, 'top', this.element.scrollTop - this.lastScrollTop);
+  // processScrollDiff(
+  // this,
+  // 'left',
+  // this.element.scrollLeft - this.lastScrollLeft
+  // );
 
   this.lastScrollTop = Math.floor(this.element.scrollTop);
-  this.lastScrollLeft = this.element.scrollLeft;
+ // this.lastScrollLeft = this.element.scrollLeft;
 };
 
 PerfectScrollbar.prototype.destroy = function destroy () {
