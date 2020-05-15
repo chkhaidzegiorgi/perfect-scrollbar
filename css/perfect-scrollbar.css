@@ -27,8 +27,7 @@
   transition: background-color .2s linear, opacity .2s linear;
   -webkit-transition: background-color .2s linear, opacity .2s linear;
   height: 100%;
-  width: 100%;
- 
+  width: 15px;
 }
 
 .ps--active-x > .ps__rail-x,
@@ -95,7 +94,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  width: 15px;
+  
 }
 
 .ps__rail-x:hover > .ps__thumb-x,
