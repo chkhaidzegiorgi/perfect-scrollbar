@@ -17,17 +17,13 @@
   opacity: 0;
   transition: background-color .2s linear, opacity .2s linear;
   -webkit-transition: background-color .2s linear, opacity .2s linear;
-  height: 15px;
-  /* there must be 'bottom' or 'top' for ps__rail-x */
-  bottom: 0px;
-  /* please don't change 'position' */
-  position: absolute;
-  top:0;
+  height: 100%;
+  width: 100%;
   will-change: transform;
 }
 
 .ps__rail-y {
-  display: block;
+  opacity: 0;
   transition: background-color .2s linear, opacity .2s linear;
   -webkit-transition: background-color .2s linear, opacity .2s linear;
   height: 100%;
@@ -85,12 +81,10 @@
   transition: background-color .2s linear, width .2s ease-in-out;
   -webkit-transition: background-color .2s linear, width .2s ease-in-out;
   width: 6px;
-  /* there must be 'right' for ps__thumb-y */
-  right: 2px;
   /* please don't change 'position' */
   position: absolute;
   top:0;
-  height:2px;
+  right: 2px;
   will-change: transform;
   transform: translate3d(0,0,0);
   -webkit-transform: translate3d(0,0,0);
