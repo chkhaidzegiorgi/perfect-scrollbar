@@ -870,6 +870,7 @@ function wheel(i) {
       shouldPrevent = true;
     }
 
+    console.log(i);
     updateGeometry(i);
 
     shouldPrevent = shouldPrevent || shouldPreventDefault(deltaX, deltaY);
@@ -881,8 +882,10 @@ function wheel(i) {
 
   if (typeof window.onwheel !== 'undefined') {
     i.event.bind(element, 'wheel', mousewheelHandler);
+    i.event.bind(i.scrollBarContainerElement, 'wheel', mousewheelHandler);
   } else if (typeof window.onmousewheel !== 'undefined') {
     i.event.bind(element, 'mousewheel', mousewheelHandler);
+    i.event.bind(i.scrollBarContainerElement, 'mousewheel', mousewheelHandler);
   }
 }
 
@@ -1134,6 +1137,7 @@ var PerfectScrollbar = function PerfectScrollbar(element, userSettings) {
   }
 
   this.element = element;
+  this.scrollBarContainerElement = document.querySelector('#scroller');
 
   element.classList.add(cls.main);
 
@@ -1181,7 +1185,7 @@ var PerfectScrollbar = function PerfectScrollbar(element, userSettings) {
 
   if(!this.settings.suppressScrollX){
     this.scrollbarXRail = div(cls.element.rail('x'));
-    document.querySelector('#scroller').appendChild(this.scrollbarXRail);
+    this.scrollBarContainerElement.appendChild(this.scrollbarXRail);
     this.scrollbarX = div(cls.element.thumb('x'));
     this.scrollbarXRail.appendChild(this.scrollbarX);
     this.scrollbarX.setAttribute('tabindex', 0);
@@ -1212,7 +1216,7 @@ var PerfectScrollbar = function PerfectScrollbar(element, userSettings) {
   if(!this.settings.suppressScrollY){
     this.scrollbarYRail = div(cls.element.rail('y'));
     // element.appendChild(this.scrollbarYRail);
-     document.querySelector('#scroller').appendChild(this.scrollbarYRail);
+     this.scrollBarContainerElement.appendChild(this.scrollbarYRail);
      this.scrollbarY = div(cls.element.thumb('y'));
      this.scrollbarYRail.appendChild(this.scrollbarY);
      this.scrollbarY.setAttribute('tabindex', 0);
