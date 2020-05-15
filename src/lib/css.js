@@ -12,7 +12,9 @@ export function set(element, obj) {
 
     if(key==='top'){
       let translate = 'translate3d(0, '+val+', 0)';
-      console.log(translate);
+      setWebkits(element, translate);
+    }else if(key ==='left'){
+      let translate = 'translate3d('+val+',0 , 0)';
       setWebkits(element, translate);
     }else{
       element.style[key] = val;
@@ -24,8 +26,8 @@ export function set(element, obj) {
 
 function setWebkits(element,transform){
   element.style.webkitTransform = transform;
-element.style.MozTransform = transform;
-element.style.msTransform = transform;
-element.style.OTransform = transform;
-element.style.transform = transform;
+  element.style.MozTransform = transform;
+  element.style.msTransform = transform;
+  element.style.OTransform = transform;
+  element.style.transform = transform;
 }
