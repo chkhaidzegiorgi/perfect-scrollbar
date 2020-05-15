@@ -22,7 +22,7 @@ export default function(
     fields = [
       'contentHeight',
       'containerHeight',
-      'scrollTop',
+      'scrollbarYTop',
       'y',
       'up',
       'down',
@@ -31,7 +31,7 @@ export default function(
     fields = [
       'contentWidth',
       'containerWidth',
-      'scrollLeft',
+      'scrollbarXLeft',
       'x',
       'left',
       'right',
@@ -46,7 +46,7 @@ export default function(
 function processScrollDiff(
   i,
   diff,
-  [contentHeight, containerHeight, scrollTop, y, up, down],
+  [contentHeight, containerHeight, scroll, y, up, down],
   useScrollingClass = true,
   forceFireReachEvent = false
 ) {
@@ -56,12 +56,12 @@ function processScrollDiff(
   i.reach[y] = null;
 
   // 1 for subpixel rounding
-  if (element[scrollTop] < 1) {
+  if (i[scroll] < 1) {
     i.reach[y] = 'start';
   }
 
   // 1 for subpixel rounding
-  if (element[scrollTop] > i[contentHeight] - i[containerHeight] - 1) {
+  if (i[scroll] > i[contentHeight] - i[containerHeight] - 1) {
     i.reach[y] = 'end';
   }
 

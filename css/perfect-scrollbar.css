@@ -75,6 +75,8 @@
   position: absolute;
   top:0;
   will-change: transform;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
 }
 
 .ps__thumb-y {
@@ -90,6 +92,8 @@
   top:0;
   height:2px;
   will-change: transform;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
 }
 
 #scroller{

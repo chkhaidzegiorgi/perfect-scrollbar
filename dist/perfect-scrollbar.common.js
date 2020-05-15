@@ -224,7 +224,7 @@ function processScrollDiff(
     fields = [
       'contentHeight',
       'containerHeight',
-      'scrollTop',
+      'scrollbarYTop',
       'y',
       'up',
       'down' ];
@@ -232,7 +232,7 @@ function processScrollDiff(
     fields = [
       'contentWidth',
       'containerWidth',
-      'scrollLeft',
+      'scrollbarXLeft',
       'x',
       'left',
       'right' ];
@@ -252,7 +252,7 @@ function processScrollDiff$1(
 ) {
   var contentHeight = ref[0];
   var containerHeight = ref[1];
-  var scrollTop = ref[2];
+  var scroll = ref[2];
   var y = ref[3];
   var up = ref[4];
   var down = ref[5];
@@ -265,12 +265,12 @@ function processScrollDiff$1(
   i.reach[y] = null;
 
   // 1 for subpixel rounding
-  if (element[scrollTop] < 1) {
+  if (i[scroll] < 1) {
     i.reach[y] = 'start';
   }
 
   // 1 for subpixel rounding
-  if (element[scrollTop] > i[contentHeight] - i[containerHeight] - 1) {
+  if (i[scroll] > i[contentHeight] - i[containerHeight] - 1) {
     i.reach[y] = 'end';
   }
 
@@ -441,14 +441,14 @@ function updateCss(i) {
   if(!i.settings.suppressScrollX){
     set(i.scrollbarX, {
       left: i.scrollbarXLeft,
-      width: i.scrollbarXWidth - i.railBorderXWidth,
+    //  width: i.scrollbarXWidth - i.railBorderXWidth,
     });
   }
 
   if(!i.settings.suppressScrollY){
     set(i.scrollbarY, {
       top: i.scrollbarYTop,
-      height: i.scrollbarYHeight - i.railBorderYWidth,
+    //  height: i.scrollbarYHeight - i.railBorderYWidth,
     });
   }
  
@@ -494,26 +494,31 @@ function clickRail(i) {
 }
 
 function dragThumb(i) {
-  bindMouseScrollHandler(i, [
-    'containerWidth',
-    'contentWidth',
-    'pageX',
-    'railXWidth',
-    'scrollbarX',
-    'scrollbarXWidth',
-    'scrollLeft',
-    'x',
-    'scrollbarXRail' ]);
-  bindMouseScrollHandler(i, [
-    'containerHeight',
-    'contentHeight',
-    'pageY',
-    'railYHeight',
-    'scrollbarY',
-    'scrollbarYHeight',
-    'scrollTop',
-    'y',
-    'scrollbarYRail' ]);
+  if(!i.settings.suppressScrollX){
+    bindMouseScrollHandler(i, [
+      'containerWidth',
+      'contentWidth',
+      'pageX',
+      'railXWidth',
+      'scrollbarX',
+      'scrollbarXWidth',
+      'scrollLeft',
+      'x',
+      'scrollbarXRail' ]);
+  }
+
+  if(!i.settings.suppressScrollY){
+    bindMouseScrollHandler(i, [
+      'containerHeight',
+      'contentHeight',
+      'pageY',
+      'railYHeight',
+      'scrollbarY',
+      'scrollbarYHeight',
+      'scrollTop',
+      'y',
+      'scrollbarYRail' ]);
+  }
 }
 
 function bindMouseScrollHandler(
@@ -532,12 +537,57 @@ function bindMouseScrollHandler(
 
   var element = i.element;
 
-  // i.event.bind(i[scrollbarY], 'mousedown', e => {
-  //   bindMoves(e);
-  // });
-  // i.event.bind(i[scrollbarY], 'touchstart', e => {
-  //   bindMoves(e, true);
-  // });
+  var startingScrollTop = null;
+  var startingMousePageY = null;
+  var scrollBy = null;
+
+  function mouseMoveHandler(e) {
+    if (e.touches && e.touches[0]) {
+      e[pageY] = e.touches[0].pageY;
+    }
+    element[scrollTop] =
+      startingScrollTop + scrollBy * (e[pageY] - startingMousePageY);
+    addScrollingClass(i, y);
+    updateGeometry(i);
+
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
+  function mouseUpHandler() {
+    removeScrollingClass(i, y);
+    i[scrollbarYRail].classList.remove(cls.state.clicking);
+    i.event.unbind(i.ownerDocument, 'mousemove', mouseMoveHandler);
+  }
+
+  function bindMoves(e, touchMode) {
+    startingScrollTop = element[scrollTop];
+    if (touchMode && e.touches) {
+      e[pageY] = e.touches[0].pageY;
+    }
+    startingMousePageY = e[pageY];
+    scrollBy =
+      (i[contentHeight] - i[containerHeight]) /
+      (i[railYHeight] - i[scrollbarYHeight]);
+    if (!touchMode) {
+      i.event.bind(i.ownerDocument, 'mousemove', mouseMoveHandler);
+      i.event.once(i.ownerDocument, 'mouseup', mouseUpHandler);
+      e.preventDefault();
+    } else {
+      i.event.bind(i.ownerDocument, 'touchmove', mouseMoveHandler);
+    }
+
+    i[scrollbarYRail].classList.add(cls.state.clicking);
+
+    e.stopPropagation();
+  }
+
+  i.event.bind(i[scrollbarY], 'mousedown', function (e) {
+    bindMoves(e);
+  });
+  i.event.bind(i[scrollbarY], 'touchstart', function (e) {
+    bindMoves(e, true);
+  });
 }
 
 function keyboard(i) {
@@ -1100,9 +1150,9 @@ var PerfectScrollbar = function PerfectScrollbar(element, userSettings) {
   // this.contentHeight = null;
 
   var rect = element.getBoundingClientRect();
+
   this.containerWidth = Math.round(rect.width);
   this.containerHeight = Math.round(rect.height);
-  
   this.contentWidth = element.scrollWidth;
   this.contentHeight = element.scrollHeight;
 
@@ -1161,7 +1211,6 @@ var PerfectScrollbar = function PerfectScrollbar(element, userSettings) {
     this.railXRatio = null;
   }
 
- 
   if(!this.settings.suppressScrollY){
     this.scrollbarYRail = div(cls.element.rail('y'));
     // element.appendChild(this.scrollbarYRail);
@@ -1193,7 +1242,6 @@ var PerfectScrollbar = function PerfectScrollbar(element, userSettings) {
      this.railYRatio = null;
   }
   
-
   this.reach = {
     x:
       element.scrollLeft <= 0
@@ -1276,13 +1324,13 @@ PerfectScrollbar.prototype.onScroll = function onScroll (e) {
   updateGeometry(this);
 
   if(!this.suppressScrollY){
-    processScrollDiff(this, 'top', this.element.scrollTop - this.lastScrollTop);
-    this.lastScrollTop = Math.floor(this.element.scrollTop);
+    processScrollDiff(this, 'top', this.scrollbarYTop - this.lastScrollTop);
+    this.lastScrollTop = Math.floor(this.scrollbarYTop);
   }
 
   if(!this.suppressScrollX){
-    processScrollDiff( this,'left',this.element.scrollLeft - this.lastScrollLeft);
-    this.lastScrollLeft = this.element.scrollLeft;
+    processScrollDiff(this,'left',this.scrollbarXLeft - this.lastScrollLeft);
+    this.lastScrollLeft = this.scrollbarXLeft;
   }
 };
 

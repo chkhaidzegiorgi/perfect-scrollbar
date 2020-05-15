@@ -110,14 +110,14 @@ function updateCss(i) {
   if(!i.settings.suppressScrollX){
     CSS.set(i.scrollbarX, {
       left: i.scrollbarXLeft,
-      width: i.scrollbarXWidth - i.railBorderXWidth,
+    //  width: i.scrollbarXWidth - i.railBorderXWidth,
     });
   }
 
   if(!i.settings.suppressScrollY){
     CSS.set(i.scrollbarY, {
       top: i.scrollbarYTop,
-      height: i.scrollbarYHeight - i.railBorderYWidth,
+    //  height: i.scrollbarYHeight - i.railBorderYWidth,
     });
   }
  

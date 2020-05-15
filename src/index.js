@@ -61,9 +61,9 @@ export default class PerfectScrollbar {
     // this.contentHeight = null;
 
     const rect = element.getBoundingClientRect();
+
     this.containerWidth = Math.round(rect.width);
     this.containerHeight = Math.round(rect.height);
-  
     this.contentWidth = element.scrollWidth;
     this.contentHeight = element.scrollHeight;
 
@@ -122,7 +122,6 @@ export default class PerfectScrollbar {
       this.railXRatio = null;
     }
 
- 
     if(!this.settings.suppressScrollY){
       this.scrollbarYRail = DOM.div(cls.element.rail('y'));
       // element.appendChild(this.scrollbarYRail);
@@ -154,7 +153,6 @@ export default class PerfectScrollbar {
        this.railYRatio = null;
     }
   
-
     this.reach = {
       x:
         element.scrollLeft <= 0
@@ -237,13 +235,13 @@ export default class PerfectScrollbar {
     updateGeometry(this);
 
     if(!this.suppressScrollY){
-      processScrollDiff(this, 'top', this.element.scrollTop - this.lastScrollTop);
-      this.lastScrollTop = Math.floor(this.element.scrollTop);
+      processScrollDiff(this, 'top', this.scrollbarYTop - this.lastScrollTop);
+      this.lastScrollTop = Math.floor(this.scrollbarYTop);
     }
 
     if(!this.suppressScrollX){
-      processScrollDiff( this,'left',  this.element.scrollLeft - this.lastScrollLeft);
-      this.lastScrollLeft = this.element.scrollLeft;
+      processScrollDiff(this,'left',  this.scrollbarXLeft - this.lastScrollLeft);
+      this.lastScrollLeft = this.scrollbarXLeft;
     }
   }
 

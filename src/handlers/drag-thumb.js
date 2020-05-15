@@ -8,28 +8,33 @@ import updateGeometry from '../update-geometry';
 import { toInt } from '../lib/util';
 
 export default function(i) {
-  bindMouseScrollHandler(i, [
-    'containerWidth',
-    'contentWidth',
-    'pageX',
-    'railXWidth',
-    'scrollbarX',
-    'scrollbarXWidth',
-    'scrollLeft',
-    'x',
-    'scrollbarXRail',
-  ]);
-  bindMouseScrollHandler(i, [
-    'containerHeight',
-    'contentHeight',
-    'pageY',
-    'railYHeight',
-    'scrollbarY',
-    'scrollbarYHeight',
-    'scrollTop',
-    'y',
-    'scrollbarYRail',
-  ]);
+  if(!i.settings.suppressScrollX){
+    bindMouseScrollHandler(i, [
+      'containerWidth',
+      'contentWidth',
+      'pageX',
+      'railXWidth',
+      'scrollbarX',
+      'scrollbarXWidth',
+      'scrollLeft',
+      'x',
+      'scrollbarXRail',
+    ]);
+  }
+
+  if(!i.settings.suppressScrollY){
+    bindMouseScrollHandler(i, [
+      'containerHeight',
+      'contentHeight',
+      'pageY',
+      'railYHeight',
+      'scrollbarY',
+      'scrollbarYHeight',
+      'scrollTop',
+      'y',
+      'scrollbarYRail',
+    ]);
+  }
 }
 
 function bindMouseScrollHandler(
@@ -93,10 +98,10 @@ function bindMouseScrollHandler(
     e.stopPropagation();
   }
 
-  // i.event.bind(i[scrollbarY], 'mousedown', e => {
-  //   bindMoves(e);
-  // });
-  // i.event.bind(i[scrollbarY], 'touchstart', e => {
-  //   bindMoves(e, true);
-  // });
+  i.event.bind(i[scrollbarY], 'mousedown', e => {
+    bindMoves(e);
+  });
+  i.event.bind(i[scrollbarY], 'touchstart', e => {
+    bindMoves(e, true);
+  });
 }
