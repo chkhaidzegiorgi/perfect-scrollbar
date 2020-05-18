@@ -61,6 +61,7 @@
 
     <br>
     <div id="container" class="w-50">
+      <div class="ps-content" id="content"></div>
     </div>
 
   </section>
@@ -87,16 +88,17 @@
 
       function addEntries() {
         for (var i = 0; i < 10; i++) {
-          $('#container').innerHTML +=
+          $('#content').innerHTML +=
             '<div class="entryPlaceholder">I love <a href="https://mdbootstrap.com?utm_campaign=PS&utm_source=Package">Material Design</a> #' +
             (x++) + '</div>';
         }
       }
 
       addEntries();
-      var ps = new PerfectScrollbar('#container');
+      var ps = new PerfectScrollbar('#container', '.ps-content');
 
-      $('#container').addEventListener('ps-y-reach-end', function () {
+      $('#content').addEventListener('ps-y-reach-end', function () {
+        console.log('x')
         addEntries();
         ps.update();
       });
