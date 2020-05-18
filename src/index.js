@@ -46,7 +46,7 @@ export default class PerfectScrollbar {
       throw new Error('no element is specified to initialize PerfectScrollbar');
     }
 
-    const content = document.querySelector(contentElement);
+    const content = element.querySelector(contentElement);
 
     if(!content || !content.nodeName){
       throw new Error('no element content is specified to initialize PerfectScrollbar');

@@ -1102,7 +1102,7 @@ var PerfectScrollbar = function PerfectScrollbar(element, contentElement, userSe
     throw new Error('no element is specified to initialize PerfectScrollbar');
   }
 
-  var content = document.querySelector(contentElement);
+  var content = element.querySelector(contentElement);
 
   if(!content || !content.nodeName){
     throw new Error('no element content is specified to initialize PerfectScrollbar');
