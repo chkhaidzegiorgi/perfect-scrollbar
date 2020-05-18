@@ -56,17 +56,7 @@ export default class PerfectScrollbar {
       this.settings[key] = userSettings[key];
     }
 
-    // this.containerWidth = null;
-    // this.containerHeight = null;
-    // this.contentWidth = null;
-    // this.contentHeight = null;
-
-    const rect = element.getBoundingClientRect();
-
-    this.containerWidth = Math.round(rect.width);
-    this.containerHeight = Math.round(rect.height);
-    this.contentWidth = element.scrollWidth;
-    this.contentHeight = element.scrollHeight;
+    this.updateRectangle();
 
     const focus = () => element.classList.add(cls.state.focus);
     const blur = () => element.classList.remove(cls.state.focus);
@@ -244,6 +234,15 @@ export default class PerfectScrollbar {
       processScrollDiff(this,'left',  this.scrollbarXLeft - this.lastScrollLeft);
       this.lastScrollLeft = this.scrollbarXLeft;
     }
+  }
+
+  updateRectangle(){
+    const rect = this.element.getBoundingClientRect();
+
+    this.containerWidth = Math.round(rect.width);
+    this.containerHeight = Math.round(rect.height);
+    this.contentWidth = this.element.scrollWidth;
+    this.contentHeight = this.element.scrollHeight;
   }
 
   destroy() {

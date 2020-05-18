@@ -141,7 +141,6 @@ export default function(i) {
       shouldPrevent = true;
     }
 
-    console.log(i)
     updateGeometry(i);
 
     shouldPrevent = shouldPrevent || shouldPreventDefault(deltaX, deltaY);
