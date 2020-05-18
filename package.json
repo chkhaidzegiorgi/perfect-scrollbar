@@ -1,8 +1,8 @@
 {
-  "name": "perfect-scrollbar",
-  "version": "1.5.0",
+  "name": "@singular-group/custom-scrollbar",
+  "version": "1.0.0",
   "description": "Minimalistic but perfect custom scrollbar plugin",
-  "author": "Hyunje Jun <me@noraesae.net>",
+  "author": "modified by kenj",
   "keywords": [
     "frontend",
     "scroll",
@@ -10,10 +10,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/mdbootstrap/perfect-scrollbar"
+    "url": "git+https://github.com/chkhaidzegiorgi/perfect-scrollbar"
   },
   "bugs": {
-    "url": "https://github.com/mdbootstrap/perfect-scrollbar/issues"
+    "url": "https://github.com/chkhaidzegiorgi/perfect-scrollbar/issues"
   },
   "jspm": {
     "main": "dist/perfect-scrollbar.common.js",
@@ -47,5 +47,11 @@
     "format:lint": "prettier -l --single-quote --trailing-comma es5 'src/**/*.js'",
     "release": "./release"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "homepage": "https://github.com/chkhaidzegiorgi/perfect-scrollbar#readme",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "dependencies": {}
 }
