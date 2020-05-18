@@ -16,7 +16,7 @@ declare namespace PerfectScrollbar {
 }
 
 declare class PerfectScrollbar {
-  constructor(element: string | Element, options?: PerfectScrollbar.Options);
+  constructor(element: string | Element, contentElement: string, options?: PerfectScrollbar.Options);
 
   update(): void;
   destroy(): void;
