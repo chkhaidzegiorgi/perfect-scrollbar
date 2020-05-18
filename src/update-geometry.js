@@ -4,8 +4,8 @@ import cls from './lib/class-names';
 import { toInt } from './lib/util';
 
 export default function(i) {
-  const element = i.content;
-  const roundedScrollTop = Math.floor(element.scrollTop);
+  const element = i.element;
+  const roundedScrollTop = Math.floor(i.content.scrollTop);
 
   if (
     !i.settings.suppressScrollX &&
@@ -19,7 +19,7 @@ export default function(i) {
       toInt((i.railXWidth * i.containerWidth) / i.contentWidth)
     );
     i.scrollbarXLeft = toInt(
-      ((i.negativeScrollAdjustment + element.scrollLeft) *
+      ((i.negativeScrollAdjustment + i.content.scrollLeft) *
         (i.railXWidth - i.scrollbarXWidth)) /
         (i.contentWidth - i.containerWidth)
     );

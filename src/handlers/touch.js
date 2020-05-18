@@ -8,11 +8,11 @@ export default function(i) {
     return;
   }
 
-  const element = i.content;
+  const element = i.element;
 
   function shouldPrevent(deltaX, deltaY) {
-    const scrollTop = Math.floor(element.scrollTop);
-    const scrollLeft = element.scrollLeft;
+    const scrollTop = Math.floor(i.content.scrollTop);
+    const scrollLeft = i.content.scrollLeft;
     const magnitudeX = Math.abs(deltaX);
     const magnitudeY = Math.abs(deltaY);
 
@@ -41,8 +41,8 @@ export default function(i) {
   }
 
   function applyTouchMove(differenceX, differenceY) {
-    element.scrollTop -= differenceY;
-    element.scrollLeft -= differenceX;
+    i.content.scrollTop -= differenceY;
+    i.content.scrollLeft -= differenceX;
 
     updateGeometry(i);
   }

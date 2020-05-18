@@ -51,7 +51,6 @@ function processScrollDiff(
   forceFireReachEvent = false
 ) {
   const element = i.element;
-
   // reset reach
   i.reach[y] = null;
 

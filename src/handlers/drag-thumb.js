@@ -51,7 +51,7 @@ function bindMouseScrollHandler(
     scrollbarYRail,
   ]
 ) {
-  const element = i.content;
+  const element = i.element;
 
   let startingScrollTop = null;
   let startingMousePageY = null;
@@ -61,7 +61,7 @@ function bindMouseScrollHandler(
     if (e.touches && e.touches[0]) {
       e[pageY] = e.touches[0].pageY;
     }
-    element[scrollTop] =
+    i.content[scrollTop] =
       startingScrollTop + scrollBy * (e[pageY] - startingMousePageY);
     addScrollingClass(i, y);
     updateGeometry(i);
@@ -77,7 +77,7 @@ function bindMouseScrollHandler(
   }
 
   function bindMoves(e, touchMode) {
-    startingScrollTop = element[scrollTop];
+    startingScrollTop = i.content[scrollTop];
     if (touchMode && e.touches) {
       e[pageY] = e.touches[0].pageY;
     }

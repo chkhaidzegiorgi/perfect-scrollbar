@@ -4,18 +4,18 @@ import updateGeometry from '../update-geometry';
 import { env } from '../lib/util';
 
 export default function(i) {
-  const element = i.content;
+  const element = i.element;
 
   let shouldPrevent = false;
 
   function shouldPreventDefault(deltaX, deltaY) {
-    const roundedScrollTop = Math.floor(element.scrollTop);
-    const isTop = element.scrollTop === 0;
+    const roundedScrollTop = Math.floor(i.content.scrollTop);
+    const isTop = i.content.scrollTop === 0;
     const isBottom =
-      roundedScrollTop + element.offsetHeight === element.scrollHeight;
-    const isLeft = element.scrollLeft === 0;
+      roundedScrollTop + i.content.offsetHeight === i.content.scrollHeight;
+    const isLeft = i.content.scrollLeft === 0;
     const isRight =
-      element.scrollLeft + element.offsetWidth === element.scrollWidth;
+    i.content.scrollLeft + i.content.offsetWidth === i.content.scrollWidth;
 
     let hitsBound;
 
@@ -119,24 +119,24 @@ export default function(i) {
     if (!i.settings.useBothWheelAxes) {
       // deltaX will only be used for horizontal scrolling and deltaY will
       // only be used for vertical scrolling - this is the default
-      element.scrollTop -= deltaY * i.settings.wheelSpeed;
-      element.scrollLeft += deltaX * i.settings.wheelSpeed;
+      i.content.scrollTop -= deltaY * i.settings.wheelSpeed;
+      i.content.scrollLeft += deltaX * i.settings.wheelSpeed;
     } else if (i.scrollbarYActive && !i.scrollbarXActive) {
       // only vertical scrollbar is active and useBothWheelAxes option is
       // active, so let's scroll vertical bar using both mouse wheel axes
       if (deltaY) {
-        element.scrollTop -= deltaY * i.settings.wheelSpeed;
+        i.content.scrollTop -= deltaY * i.settings.wheelSpeed;
       } else {
-        element.scrollTop += deltaX * i.settings.wheelSpeed;
+        i.content.scrollTop += deltaX * i.settings.wheelSpeed;
       }
       shouldPrevent = true;
     } else if (i.scrollbarXActive && !i.scrollbarYActive) {
       // useBothWheelAxes and only horizontal bar is active, so use both
       // wheel axes for horizontal bar
       if (deltaX) {
-        element.scrollLeft += deltaX * i.settings.wheelSpeed;
+        i.content.scrollLeft += deltaX * i.settings.wheelSpeed;
       } else {
-        element.scrollLeft -= deltaY * i.settings.wheelSpeed;
+        i.content.scrollLeft -= deltaY * i.settings.wheelSpeed;
       }
       shouldPrevent = true;
     }

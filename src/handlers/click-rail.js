@@ -1,7 +1,7 @@
 import updateGeometry from '../update-geometry';
 
 export default function(i) {
-  const element = i.content;
+  const element = i.element;
 
   if(!i.settings.suppressScrollY){
     i.event.bind(i.scrollbarY, 'mousedown', e => e.stopPropagation());
@@ -13,7 +13,7 @@ export default function(i) {
         i.scrollbarYRail.getBoundingClientRect().top;
       const direction = positionTop > i.scrollbarYTop ? 1 : -1;
 
-      i.element.scrollTop += direction * i.containerHeight;
+      i.content.scrollTop += direction * i.containerHeight;
 
       updateGeometry(i);
 
@@ -30,7 +30,7 @@ export default function(i) {
         i.scrollbarXRail.getBoundingClientRect().left;
       const direction = positionLeft > i.scrollbarXLeft ? 1 : -1;
   
-      i.element.scrollLeft += direction * i.containerWidth;
+      i.content.scrollLeft += direction * i.containerWidth;
       updateGeometry(i);
   
       e.stopPropagation();
