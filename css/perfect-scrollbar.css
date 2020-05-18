@@ -1,7 +1,8 @@
 /*
  * Container style
  */
-.ps {
+.ps,
+.ps-content {
   overflow: hidden !important;
   overflow-anchor: none;
   -ms-overflow-style: none;
@@ -13,26 +14,25 @@
  * Scrollbar rail styles
  */
 .ps__rail-x {
-  display: none;
   opacity: 0;
   transition: background-color .2s linear, opacity .2s linear;
   -webkit-transition: background-color .2s linear, opacity .2s linear;
-  height: 15px;
-  /* there must be 'bottom' or 'top' for ps__rail-x */
-  bottom: 0px;
-  /* please don't change 'position' */
+  width: 100%;
+  height: 10px;
   position: absolute;
-  top:0;
-  will-change: transform;
+  bottom:0;
+  left:0;
 }
 
 .ps__rail-y {
-  display: block;
+  opacity: 0;
   transition: background-color .2s linear, opacity .2s linear;
   -webkit-transition: background-color .2s linear, opacity .2s linear;
   height: 100%;
-  width: 100%;
- 
+  width: 15px;
+  position: absolute;
+  right:0;
+  top:0;
 }
 
 .ps--active-x > .ps__rail-x,
@@ -69,12 +69,11 @@
   transition: background-color .2s linear, height .2s ease-in-out;
   -webkit-transition: background-color .2s linear, height .2s ease-in-out;
   height: 6px;
-  /* there must be 'bottom' for ps__thumb-x */
-  bottom: 2px;
-  /* please don't change 'position' */
-  position: absolute;
-  top:0;
   will-change: transform;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  position: absolute;
+  bottom:2px;
 }
 
 .ps__thumb-y {
@@ -83,21 +82,12 @@
   transition: background-color .2s linear, width .2s ease-in-out;
   -webkit-transition: background-color .2s linear, width .2s ease-in-out;
   width: 6px;
-  /* there must be 'right' for ps__thumb-y */
-  right: 2px;
-  /* please don't change 'position' */
-  position: absolute;
-  top:0;
-  height:2px;
   will-change: transform;
-}
-
-#scroller{
-  height: 100%;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  display: inline-block;
   position: absolute;
-  right: 0;
-  top: 0;
-  width: 15px;
+  right:2px;
 }
 
 .ps__rail-x:hover > .ps__thumb-x,
@@ -112,6 +102,12 @@
 .ps__rail-y.ps--clicking .ps__thumb-y {
   background-color: #999;
   width: 11px;
+}
+
+
+.ps-content{
+  height:100%;
+  width:100%;
 }
 
 /* MS supports */

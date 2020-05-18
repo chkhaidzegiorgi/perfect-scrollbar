@@ -5,12 +5,12 @@ import { isEditable } from '../lib/util';
 export default function(i) {
   const element = i.element;
 
-  // const elementHovered = () => DOM.matches(element, ':hover');
-  // const scrollbarFocused = () =>
-  //   DOM.matches(i.scrollbarX, ':focus') || DOM.matches(i.scrollbarY, ':focus');
+  const elementHovered = () => DOM.matches(element, ':hover');
+  const scrollbarFocused = () =>
+    (!i.settings.suppressScrollX && DOM.matches(i.scrollbarX, ':focus')) || (!i.settings.suppressScrollY && DOM.matches(i.scrollbarY, ':focus'));
 
   function shouldPreventDefault(deltaX, deltaY) {
-    const scrollTop = Math.floor(element.scrollTop);
+    const scrollTop = Math.floor(i.content.scrollTop);
     if (deltaX === 0) {
       if (!i.scrollbarYActive) {
         return false;
@@ -23,7 +23,7 @@ export default function(i) {
       }
     }
 
-    const scrollLeft = element.scrollLeft;
+    const scrollLeft = i.content.scrollLeft;
     if (deltaY === 0) {
       if (!i.scrollbarXActive) {
         return false;
@@ -46,9 +46,9 @@ export default function(i) {
       return;
     }
 
-    // if (!elementHovered() && !scrollbarFocused()) {
-    //   return;
-    // }
+    if (!elementHovered() && !scrollbarFocused()) {
+      return;
+    }
 
     let activeElement = document.activeElement
       ? document.activeElement
@@ -137,8 +137,8 @@ export default function(i) {
       return;
     }
 
-    element.scrollTop -= deltaY;
-    element.scrollLeft += deltaX;
+    i.content.scrollTop -= deltaY;
+    i.content.scrollLeft += deltaX;
     updateGeometry(i);
 
     if (shouldPreventDefault(deltaX, deltaY)) {

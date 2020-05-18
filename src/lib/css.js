@@ -10,22 +10,7 @@ export function set(element, obj) {
       val = `${val}px`;
     }
 
-    if(key==='top'){
-      let translate = 'translate3d(0, '+val+', 0)';
-      console.log(translate);
-      setWebkits(element, translate);
-    }else{
-      element.style[key] = val;
-    }
+    element.style[key] = val;
   }
   return element;
-}
-
-
-function setWebkits(element,transform){
-  element.style.webkitTransform = transform;
-element.style.MozTransform = transform;
-element.style.msTransform = transform;
-element.style.OTransform = transform;
-element.style.transform = transform;
 }
