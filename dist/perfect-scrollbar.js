@@ -322,7 +322,7 @@
   };
 
   function updateGeometry(i) {
-    var element = i.element;
+    var element = i.content;
     var roundedScrollTop = Math.floor(element.scrollTop);
 
     if (
@@ -427,7 +427,7 @@
   }
 
   function clickRail(i) {
-    var element = i.element;
+    var element = i.content;
 
     if(!i.settings.suppressScrollY){
       i.event.bind(i.scrollbarY, 'mousedown', function (e) { return e.stopPropagation(); });
@@ -507,7 +507,7 @@
     var y = ref[7];
     var scrollbarYRail = ref[8];
 
-    var element = i.element;
+    var element = i.content;
 
     var startingScrollTop = null;
     var startingMousePageY = null;
@@ -563,7 +563,7 @@
   }
 
   function keyboard(i) {
-    var element = i.element;
+    var element = i.content;
 
     var elementHovered = function () { return matches(element, ':hover'); };
     var scrollbarFocused = function () { return (!i.settings.suppressScrollX && matches(i.scrollbarX, ':focus')) || (!i.settings.suppressScrollY && matches(i.scrollbarY, ':focus')); };
@@ -707,7 +707,7 @@
   }
 
   function wheel(i) {
-    var element = i.element;
+    var element = i.content;
 
     function shouldPreventDefault(deltaX, deltaY) {
       var roundedScrollTop = Math.floor(element.scrollTop);
@@ -855,10 +855,8 @@
 
     if (typeof window.onwheel !== 'undefined') {
       i.event.bind(element, 'wheel', mousewheelHandler);
-     // i.event.bind(i.scrollBarContainerElement, 'wheel', mousewheelHandler);
     } else if (typeof window.onmousewheel !== 'undefined') {
       i.event.bind(element, 'mousewheel', mousewheelHandler);
-      //i.event.bind(i.scrollBarContainerElement, 'mousewheel', mousewheelHandler);
     }
   }
 
@@ -867,7 +865,7 @@
       return;
     }
 
-    var element = i.element;
+    var element = i.content;
 
     function shouldPrevent(deltaX, deltaY) {
       var scrollTop = Math.floor(element.scrollTop);
@@ -1096,7 +1094,7 @@
     touch: touch,
   };
 
-  var PerfectScrollbar = function PerfectScrollbar(element, userSettings) {
+  var PerfectScrollbar = function PerfectScrollbar(element, contentElement, userSettings) {
     var this$1 = this;
     if ( userSettings === void 0 ) userSettings = {};
 
@@ -1109,8 +1107,15 @@
       throw new Error('no element is specified to initialize PerfectScrollbar');
     }
 
-    this.element = element;
+    var content = document.querySelector(contentElement);
 
+    if(!content || !content.nodeName){
+      throw new Error('no element content is specified to initialize PerfectScrollbar');
+    }
+
+    this.element = element;
+    this.content = content;
+      
     element.classList.add(cls.main);
 
     this.settings = defaultSettings();
@@ -1207,15 +1212,15 @@
     
     this.reach = {
       x:
-        element.scrollLeft <= 0
+        content.scrollLeft <= 0
           ? 'start'
           : element.scrollLeft >= this.contentWidth - this.containerWidth
           ? 'end'
           : null,
       y:
-        element.scrollTop <= 0
+      content.scrollTop <= 0
           ? 'start'
-          : element.scrollTop >= this.contentHeight - this.containerHeight
+          : content.scrollTop >= this.contentHeight - this.containerHeight
           ? 'end'
           : null,
     };
@@ -1224,8 +1229,8 @@
 
     this.settings.handlers.forEach(function (handlerName) { return handlers[handlerName](this$1); });
 
-    this.lastScrollTop = Math.floor(element.scrollTop); // for onScroll only
-    this.lastScrollLeft = element.scrollLeft; // for onScroll only
+    this.lastScrollTop = Math.floor(content.scrollTop); // for onScroll only
+    this.lastScrollLeft = content.scrollLeft; // for onScroll only
     this.event.bind(this.element, 'scroll', function (e) { return this$1.onScroll(e); });
     updateGeometry(this);
   };
@@ -1298,12 +1303,12 @@
   };
 
   PerfectScrollbar.prototype.updateRectangle = function updateRectangle (){
-    var rect = this.element.getBoundingClientRect();
+    var rect = this.content.getBoundingClientRect();
 
     this.containerWidth = Math.round(rect.width);
     this.containerHeight = Math.round(rect.height);
-    this.contentWidth = this.element.scrollWidth;
-    this.contentHeight = this.element.scrollHeight;
+    this.contentWidth = this.content.scrollWidth;
+    this.contentHeight = this.content.scrollHeight;
   };
 
   PerfectScrollbar.prototype.destroy = function destroy () {

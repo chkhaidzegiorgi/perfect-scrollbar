@@ -68,15 +68,14 @@
       overflow: hidden;
     }
 
-    .ps-content {
-      display: flex;
+    /* .ps-content {
+    display: flex;
       flex-direction: row;
+    } */
+    .ps {
+      height: 100vh;
     }
-    .ps{
-    height:100vh;
-  }
-
-</style>
+  </style>
 
 
 
@@ -84,7 +83,7 @@
 
 <body>
 
-  <div class="ps" id="ps-container">
+  <div id="ps-container">
 
     <div id="content" class="ps-content">
       <div id="football"
@@ -17255,10 +17254,13 @@
       for (let i = 0; i < 100; i++) {
         $('#content').append(html)
       }
-      const demo = document.querySelector('#ps-container');
-      const ps = new PerfectScrollbar(demo, {
-        // suppressScrollY: true
-      });
+
+      const ps = new PerfectScrollbar(
+        '#ps-container',
+        '.ps-content',
+        {
+          suppressScrollX: true
+        });
     });
   </script>
 </body>

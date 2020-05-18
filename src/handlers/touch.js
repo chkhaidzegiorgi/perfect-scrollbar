@@ -8,7 +8,7 @@ export default function(i) {
     return;
   }
 
-  const element = i.element;
+  const element = i.content;
 
   function shouldPrevent(deltaX, deltaY) {
     const scrollTop = Math.floor(element.scrollTop);

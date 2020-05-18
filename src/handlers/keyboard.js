@@ -3,7 +3,7 @@ import updateGeometry from '../update-geometry';
 import { isEditable } from '../lib/util';
 
 export default function(i) {
-  const element = i.element;
+  const element = i.content;
 
   const elementHovered = () => DOM.matches(element, ':hover');
   const scrollbarFocused = () =>

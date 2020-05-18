@@ -4,7 +4,7 @@ import cls from './lib/class-names';
 import { toInt } from './lib/util';
 
 export default function(i) {
-  const element = i.element;
+  const element = i.content;
   const roundedScrollTop = Math.floor(element.scrollTop);
 
   if (

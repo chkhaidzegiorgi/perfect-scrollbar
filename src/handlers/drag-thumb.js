@@ -51,7 +51,7 @@ function bindMouseScrollHandler(
     scrollbarYRail,
   ]
 ) {
-  const element = i.element;
+  const element = i.content;
 
   let startingScrollTop = null;
   let startingMousePageY = null;

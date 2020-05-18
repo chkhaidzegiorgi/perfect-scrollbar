@@ -4,7 +4,7 @@ import updateGeometry from '../update-geometry';
 import { env } from '../lib/util';
 
 export default function(i) {
-  const element = i.element;
+  const element = i.content;
 
   let shouldPrevent = false;
 

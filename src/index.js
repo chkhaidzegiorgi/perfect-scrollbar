@@ -36,7 +36,7 @@ const handlers = {
 };
 
 export default class PerfectScrollbar {
-  constructor(element, userSettings = {}) {
+  constructor(element, contentElement, userSettings = {}) {
 
     if (typeof element === 'string') {
       element = document.querySelector(element);
@@ -46,8 +46,15 @@ export default class PerfectScrollbar {
       throw new Error('no element is specified to initialize PerfectScrollbar');
     }
 
-    this.element = element;
+    const content = document.querySelector(contentElement);
 
+    if(!content || !content.nodeName){
+      throw new Error('no element content is specified to initialize PerfectScrollbar');
+    }
+
+    this.element = element;
+    this.content = content;
+    
     element.classList.add(cls.main);
 
     this.settings = defaultSettings();
@@ -144,15 +151,15 @@ export default class PerfectScrollbar {
   
     this.reach = {
       x:
-        element.scrollLeft <= 0
+        content.scrollLeft <= 0
           ? 'start'
           : element.scrollLeft >= this.contentWidth - this.containerWidth
           ? 'end'
           : null,
       y:
-        element.scrollTop <= 0
+      content.scrollTop <= 0
           ? 'start'
-          : element.scrollTop >= this.contentHeight - this.containerHeight
+          : content.scrollTop >= this.contentHeight - this.containerHeight
           ? 'end'
           : null,
     };
@@ -161,8 +168,8 @@ export default class PerfectScrollbar {
 
     this.settings.handlers.forEach(handlerName => handlers[handlerName](this));
 
-    this.lastScrollTop = Math.floor(element.scrollTop); // for onScroll only
-    this.lastScrollLeft = element.scrollLeft; // for onScroll only
+    this.lastScrollTop = Math.floor(content.scrollTop); // for onScroll only
+    this.lastScrollLeft = content.scrollLeft; // for onScroll only
     this.event.bind(this.element, 'scroll', e => this.onScroll(e));
     updateGeometry(this);
   }
@@ -235,12 +242,12 @@ export default class PerfectScrollbar {
   }
 
   updateRectangle(){
-    const rect = this.element.getBoundingClientRect();
+    const rect = this.content.getBoundingClientRect();
 
     this.containerWidth = Math.round(rect.width);
     this.containerHeight = Math.round(rect.height);
-    this.contentWidth = this.element.scrollWidth;
-    this.contentHeight = this.element.scrollHeight;
+    this.contentWidth = this.content.scrollWidth;
+    this.contentHeight = this.content.scrollHeight;
   }
 
   destroy() {

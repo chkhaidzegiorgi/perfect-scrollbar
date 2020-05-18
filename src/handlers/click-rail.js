@@ -1,7 +1,7 @@
 import updateGeometry from '../update-geometry';
 
 export default function(i) {
-  const element = i.element;
+  const element = i.content;
 
   if(!i.settings.suppressScrollY){
     i.event.bind(i.scrollbarY, 'mousedown', e => e.stopPropagation());
