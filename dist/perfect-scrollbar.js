@@ -22,26 +22,9 @@
         val = val + "px";
       }
 
-      if(key==='top'){
-        var translate = 'translate3d(0, '+val+', 0)';
-        setWebkits(element, translate);
-      }else if(key ==='left'){
-        var translate$1 = 'translate3d('+val+',0 , 0)';
-        setWebkits(element, translate$1);
-      }else{
-        element.style[key] = val;
-      }
+      element.style[key] = val;
     }
     return element;
-  }
-
-
-  function setWebkits(element,transform){
-    element.style.webkitTransform = transform;
-    element.style.MozTransform = transform;
-    element.style.msTransform = transform;
-    element.style.OTransform = transform;
-    element.style.transform = transform;
   }
 
   function div(className) {
@@ -342,21 +325,6 @@
     var element = i.element;
     var roundedScrollTop = Math.floor(element.scrollTop);
 
-    // if (!element.contains(i.scrollbarXRail)) {
-    //   // clean up and append
-    //   DOM.queryChildren(element, cls.element.rail('x')).forEach(el =>
-    //     DOM.remove(el)
-    //   );
-    //   element.appendChild(i.scrollbarXRail);
-    // }
-    // if (!element.contains(i.scrollbarYRail)) {
-    //   // clean up and append
-    //   DOM.queryChildren(element, cls.element.rail('y')).forEach(el =>
-    //     DOM.remove(el)
-    //   );
-    //   element.appendChild(i.scrollbarYRail);
-    // }
-
     if (
       !i.settings.suppressScrollX &&
       i.containerWidth + i.settings.scrollXMarginOffset < i.contentWidth
@@ -444,14 +412,14 @@
 
     if(!i.settings.suppressScrollX){
       set(i.scrollbarX, {
-        left: i.scrollbarXLeft,
+        transform: 'translate3d(' + i.scrollbarXLeft + 'px, 0 , 0)',
         width: i.scrollbarXWidth - i.railBorderXWidth,
       });
     }
 
     if(!i.settings.suppressScrollY){
       set(i.scrollbarY, {
-        top: i.scrollbarYTop,
+        transform: 'translate3d(0, ' + i.scrollbarYTop + 'px, 0)',
         height: i.scrollbarYHeight - i.railBorderYWidth,
       });
     }
@@ -876,7 +844,6 @@
         shouldPrevent = true;
       }
 
-      console.log(i);
       updateGeometry(i);
 
       shouldPrevent = shouldPrevent || shouldPreventDefault(deltaX, deltaY);
@@ -1152,17 +1119,7 @@
       this.settings[key] = userSettings[key];
     }
 
-    // this.containerWidth = null;
-    // this.containerHeight = null;
-    // this.contentWidth = null;
-    // this.contentHeight = null;
-
-    var rect = element.getBoundingClientRect();
-
-    this.containerWidth = Math.round(rect.width);
-    this.containerHeight = Math.round(rect.height);
-    this.contentWidth = element.scrollWidth;
-    this.contentHeight = element.scrollHeight;
+    this.updateRectangle();
 
     var focus = function () { return element.classList.add(cls.state.focus); };
     var blur = function () { return element.classList.remove(cls.state.focus); };
@@ -1340,6 +1297,15 @@
       processScrollDiff(this,'left',this.scrollbarXLeft - this.lastScrollLeft);
       this.lastScrollLeft = this.scrollbarXLeft;
     }
+  };
+
+  PerfectScrollbar.prototype.updateRectangle = function updateRectangle (){
+    var rect = this.element.getBoundingClientRect();
+
+    this.containerWidth = Math.round(rect.width);
+    this.containerHeight = Math.round(rect.height);
+    this.contentWidth = this.element.scrollWidth;
+    this.contentHeight = this.element.scrollHeight;
   };
 
   PerfectScrollbar.prototype.destroy = function destroy () {

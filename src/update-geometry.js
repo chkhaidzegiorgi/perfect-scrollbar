@@ -7,21 +7,6 @@ export default function(i) {
   const element = i.element;
   const roundedScrollTop = Math.floor(element.scrollTop);
 
-  // if (!element.contains(i.scrollbarXRail)) {
-  //   // clean up and append
-  //   DOM.queryChildren(element, cls.element.rail('x')).forEach(el =>
-  //     DOM.remove(el)
-  //   );
-  //   element.appendChild(i.scrollbarXRail);
-  // }
-  // if (!element.contains(i.scrollbarYRail)) {
-  //   // clean up and append
-  //   DOM.queryChildren(element, cls.element.rail('y')).forEach(el =>
-  //     DOM.remove(el)
-  //   );
-  //   element.appendChild(i.scrollbarYRail);
-  // }
-
   if (
     !i.settings.suppressScrollX &&
     i.containerWidth + i.settings.scrollXMarginOffset < i.contentWidth
@@ -109,14 +94,14 @@ function updateCss(i) {
 
   if(!i.settings.suppressScrollX){
     CSS.set(i.scrollbarX, {
-      left: i.scrollbarXLeft,
+      transform: 'translate3d(' + i.scrollbarXLeft + 'px, 0 , 0)',
       width: i.scrollbarXWidth - i.railBorderXWidth,
     });
   }
 
   if(!i.settings.suppressScrollY){
     CSS.set(i.scrollbarY, {
-      top: i.scrollbarYTop,
+      transform: 'translate3d(0, ' + i.scrollbarYTop + 'px, 0)',
       height: i.scrollbarYHeight - i.railBorderYWidth,
     });
   }
