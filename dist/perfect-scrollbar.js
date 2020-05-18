@@ -1,5 +1,5 @@
 /*!
- * perfect-scrollbar v1.5.0
+ * perfect-scrollbar v1.0.1
  * Copyright 2020 Hyunje Jun, MDBootstrap and Contributors
  * Licensed under MIT
  */
@@ -263,7 +263,6 @@
 
     var element = i.element;
 
-    console.log([contentHeight, containerHeight, scrollTop, y, up, down]);
     // reset reach
     i.reach[y] = null;
 
@@ -707,7 +706,6 @@
     var element = i.element;
 
     function shouldPreventDefault(deltaX, deltaY) {
-      
       var roundedScrollTop = Math.floor(element.scrollTop);
       var isTop = element.scrollTop === 0;
       var isBottom =
