@@ -5,29 +5,7 @@ import { toInt } from './lib/util';
 
 export default function(i) {
   const element = i.element;
-  const roundedScrollTop = Math.floor(element.scrollTop);
-  const rect = element.getBoundingClientRect();
-
-  i.containerWidth = Math.round(rect.width);
-  i.containerHeight = Math.round(rect.height);
-
-  i.contentWidth = element.scrollWidth;
-  i.contentHeight = element.scrollHeight;
-
-  if (!element.contains(i.scrollbarXRail)) {
-    // clean up and append
-    DOM.queryChildren(element, cls.element.rail('x')).forEach(el =>
-      DOM.remove(el)
-    );
-    element.appendChild(i.scrollbarXRail);
-  }
-  if (!element.contains(i.scrollbarYRail)) {
-    // clean up and append
-    DOM.queryChildren(element, cls.element.rail('y')).forEach(el =>
-      DOM.remove(el)
-    );
-    element.appendChild(i.scrollbarYRail);
-  }
+  const roundedScrollTop = Math.floor(i.content.scrollTop);
 
   if (
     !i.settings.suppressScrollX &&
@@ -41,7 +19,7 @@ export default function(i) {
       toInt((i.railXWidth * i.containerWidth) / i.contentWidth)
     );
     i.scrollbarXLeft = toInt(
-      ((i.negativeScrollAdjustment + element.scrollLeft) *
+      ((i.negativeScrollAdjustment + i.content.scrollLeft) *
         (i.railXWidth - i.scrollbarXWidth)) /
         (i.contentWidth - i.containerWidth)
     );
@@ -75,24 +53,31 @@ export default function(i) {
     i.scrollbarYTop = i.railYHeight - i.scrollbarYHeight;
   }
 
-  updateCss(element, i);
+  updateCss(i);
 
-  if (i.scrollbarXActive) {
-    element.classList.add(cls.state.active('x'));
-  } else {
-    element.classList.remove(cls.state.active('x'));
-    i.scrollbarXWidth = 0;
-    i.scrollbarXLeft = 0;
-    element.scrollLeft = i.isRtl === true ? i.contentWidth : 0;
+  if( !i.settings.suppressScrollX){
+    if (i.scrollbarXActive) {
+      element.classList.add(cls.state.active('x'));
+    } 
+    else {
+      element.classList.remove(cls.state.active('x'));
+      i.scrollbarXWidth = 0;
+      i.scrollbarXLeft = 0;
+      element.scrollLeft = i.isRtl === true ? i.contentWidth : 0;
+    }
   }
-  if (i.scrollbarYActive) {
-    element.classList.add(cls.state.active('y'));
-  } else {
-    element.classList.remove(cls.state.active('y'));
-    i.scrollbarYHeight = 0;
-    i.scrollbarYTop = 0;
-    element.scrollTop = 0;
+
+  if(!i.settings.suppressScrollY){
+    if (i.scrollbarYActive) {
+      element.classList.add(cls.state.active('y'));
+    } else {
+      element.classList.remove(cls.state.active('y'));
+      i.scrollbarYHeight = 0;
+      i.scrollbarYTop = 0;
+      element.scrollTop = 0;
+    }
   }
+
 }
 
 function getThumbSize(i, thumbSize) {
@@ -105,59 +90,20 @@ function getThumbSize(i, thumbSize) {
   return thumbSize;
 }
 
-function updateCss(element, i) {
-  const xRailOffset = { width: i.railXWidth };
-  const roundedScrollTop = Math.floor(element.scrollTop);
+function updateCss(i) {
 
-  if (i.isRtl) {
-    xRailOffset.left =
-      i.negativeScrollAdjustment +
-      element.scrollLeft +
-      i.containerWidth -
-      i.contentWidth;
-  } else {
-    xRailOffset.left = element.scrollLeft;
+  if(!i.settings.suppressScrollX){
+    CSS.set(i.scrollbarX, {
+      transform: 'translate3d(' + i.scrollbarXLeft + 'px, 0 , 0)',
+      width: i.scrollbarXWidth - i.railBorderXWidth,
+    });
   }
-  if (i.isScrollbarXUsingBottom) {
-    xRailOffset.bottom = i.scrollbarXBottom - roundedScrollTop;
-  } else {
-    xRailOffset.top = i.scrollbarXTop + roundedScrollTop;
-  }
-  CSS.set(i.scrollbarXRail, xRailOffset);
 
-  const yRailOffset = { top: roundedScrollTop, height: i.railYHeight };
-  if (i.isScrollbarYUsingRight) {
-    if (i.isRtl) {
-      yRailOffset.right =
-        i.contentWidth -
-        (i.negativeScrollAdjustment + element.scrollLeft) -
-        i.scrollbarYRight -
-        i.scrollbarYOuterWidth -
-        9;
-    } else {
-      yRailOffset.right = i.scrollbarYRight - element.scrollLeft;
-    }
-  } else {
-    if (i.isRtl) {
-      yRailOffset.left =
-        i.negativeScrollAdjustment +
-        element.scrollLeft +
-        i.containerWidth * 2 -
-        i.contentWidth -
-        i.scrollbarYLeft -
-        i.scrollbarYOuterWidth;
-    } else {
-      yRailOffset.left = i.scrollbarYLeft + element.scrollLeft;
-    }
+  if(!i.settings.suppressScrollY){
+    CSS.set(i.scrollbarY, {
+      transform: 'translate3d(0, ' + i.scrollbarYTop + 'px, 0)',
+      height: i.scrollbarYHeight - i.railBorderYWidth,
+    });
   }
-  CSS.set(i.scrollbarYRail, yRailOffset);
-
-  CSS.set(i.scrollbarX, {
-    left: i.scrollbarXLeft,
-    width: i.scrollbarXWidth - i.railBorderXWidth,
-  });
-  CSS.set(i.scrollbarY, {
-    top: i.scrollbarYTop,
-    height: i.scrollbarYHeight - i.railBorderYWidth,
-  });
+ 
 }

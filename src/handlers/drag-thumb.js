@@ -8,28 +8,33 @@ import updateGeometry from '../update-geometry';
 import { toInt } from '../lib/util';
 
 export default function(i) {
-  bindMouseScrollHandler(i, [
-    'containerWidth',
-    'contentWidth',
-    'pageX',
-    'railXWidth',
-    'scrollbarX',
-    'scrollbarXWidth',
-    'scrollLeft',
-    'x',
-    'scrollbarXRail',
-  ]);
-  bindMouseScrollHandler(i, [
-    'containerHeight',
-    'contentHeight',
-    'pageY',
-    'railYHeight',
-    'scrollbarY',
-    'scrollbarYHeight',
-    'scrollTop',
-    'y',
-    'scrollbarYRail',
-  ]);
+  if(!i.settings.suppressScrollX){
+    bindMouseScrollHandler(i, [
+      'containerWidth',
+      'contentWidth',
+      'pageX',
+      'railXWidth',
+      'scrollbarX',
+      'scrollbarXWidth',
+      'scrollLeft',
+      'x',
+      'scrollbarXRail',
+    ]);
+  }
+
+  if(!i.settings.suppressScrollY){
+    bindMouseScrollHandler(i, [
+      'containerHeight',
+      'contentHeight',
+      'pageY',
+      'railYHeight',
+      'scrollbarY',
+      'scrollbarYHeight',
+      'scrollTop',
+      'y',
+      'scrollbarYRail',
+    ]);
+  }
 }
 
 function bindMouseScrollHandler(
@@ -56,7 +61,7 @@ function bindMouseScrollHandler(
     if (e.touches && e.touches[0]) {
       e[pageY] = e.touches[0].pageY;
     }
-    element[scrollTop] =
+    i.content[scrollTop] =
       startingScrollTop + scrollBy * (e[pageY] - startingMousePageY);
     addScrollingClass(i, y);
     updateGeometry(i);
@@ -72,7 +77,7 @@ function bindMouseScrollHandler(
   }
 
   function bindMoves(e, touchMode) {
-    startingScrollTop = element[scrollTop];
+    startingScrollTop = i.content[scrollTop];
     if (touchMode && e.touches) {
       e[pageY] = e.touches[0].pageY;
     }
