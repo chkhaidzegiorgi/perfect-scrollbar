@@ -1,9 +1,5 @@
 /*!
-<<<<<<< HEAD
- * perfect-scrollbar v1.0.1
-=======
- * perfect-scrollbar v1.0.0
->>>>>>> cd236e56a7d4c627c52e09a2cc29c0199ad1204e
+ * perfect-scrollbar v1.0.2
  * Copyright 2020 Hyunje Jun, MDBootstrap and Contributors
  * Licensed under MIT
  */
@@ -251,10 +247,6 @@
     if ( forceFireReachEvent === void 0 ) forceFireReachEvent = false;
 
     var element = i.element;
-<<<<<<< HEAD
-
-=======
->>>>>>> cd236e56a7d4c627c52e09a2cc29c0199ad1204e
     // reset reach
     i.reach[y] = null;
 
@@ -717,13 +709,8 @@
     var element = i.element;
 
     function shouldPreventDefault(deltaX, deltaY) {
-<<<<<<< HEAD
-      var roundedScrollTop = Math.floor(element.scrollTop);
-      var isTop = element.scrollTop === 0;
-=======
       var roundedScrollTop = Math.floor(i.content.scrollTop);
       var isTop = i.content.scrollTop === 0;
->>>>>>> cd236e56a7d4c627c52e09a2cc29c0199ad1204e
       var isBottom =
         roundedScrollTop + i.content.offsetHeight === i.content.scrollHeight;
       var isLeft = i.content.scrollLeft === 0;
