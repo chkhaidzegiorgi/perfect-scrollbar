@@ -47,7 +47,6 @@ export default class PerfectScrollbar {
     }
 
     this.element = element;
-    this.scrollBarContainerElement = document.querySelector('#scroller');
 
     element.classList.add(cls.main);
 
@@ -85,7 +84,7 @@ export default class PerfectScrollbar {
 
     if(!this.settings.suppressScrollX){
       this.scrollbarXRail = DOM.div(cls.element.rail('x'));
-      this.scrollBarContainerElement.appendChild(this.scrollbarXRail)
+      element.appendChild(this.scrollbarXRail);
       this.scrollbarX = DOM.div(cls.element.thumb('x'));
       this.scrollbarXRail.appendChild(this.scrollbarX);
       this.scrollbarX.setAttribute('tabindex', 0);
@@ -115,8 +114,7 @@ export default class PerfectScrollbar {
 
     if(!this.settings.suppressScrollY){
       this.scrollbarYRail = DOM.div(cls.element.rail('y'));
-      // element.appendChild(this.scrollbarYRail);
-       this.scrollBarContainerElement.appendChild(this.scrollbarYRail)
+      element.appendChild(this.scrollbarYRail);
        this.scrollbarY = DOM.div(cls.element.thumb('y'));
        this.scrollbarYRail.appendChild(this.scrollbarY);
        this.scrollbarY.setAttribute('tabindex', 0);

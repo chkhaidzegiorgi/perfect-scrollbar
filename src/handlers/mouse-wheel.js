@@ -152,9 +152,7 @@ export default function(i) {
 
   if (typeof window.onwheel !== 'undefined') {
     i.event.bind(element, 'wheel', mousewheelHandler);
-    i.event.bind(i.scrollBarContainerElement, 'wheel', mousewheelHandler);
   } else if (typeof window.onmousewheel !== 'undefined') {
     i.event.bind(element, 'mousewheel', mousewheelHandler);
-    i.event.bind(i.scrollBarContainerElement, 'mousewheel', mousewheelHandler);
   }
 }
