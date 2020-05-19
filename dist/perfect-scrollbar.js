@@ -1,5 +1,5 @@
 /*!
- * perfect-scrollbar v1.0.2
+ * perfect-scrollbar v1.0.3
  * Copyright 2020 Hyunje Jun, MDBootstrap and Contributors
  * Licensed under MIT
  */
@@ -323,6 +323,13 @@
   function updateGeometry(i) {
     var element = i.element;
     var roundedScrollTop = Math.floor(i.content.scrollTop);
+    var rect = i.content.getBoundingClientRect();
+
+    i.containerWidth = Math.ceil(rect.width);
+    i.containerHeight = Math.ceil(rect.height);
+    i.contentWidth = i.content.scrollWidth;
+    i.contentHeight = i.content.scrollHeight;
+
 
     if (
       !i.settings.suppressScrollX &&

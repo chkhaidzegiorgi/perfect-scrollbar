@@ -6,6 +6,13 @@ import { toInt } from './lib/util';
 export default function(i) {
   const element = i.element;
   const roundedScrollTop = Math.floor(i.content.scrollTop);
+  const rect = i.content.getBoundingClientRect();
+
+  i.containerWidth = Math.ceil(rect.width);
+  i.containerHeight = Math.ceil(rect.height);
+  i.contentWidth = i.content.scrollWidth;
+  i.contentHeight = i.content.scrollHeight;
+
 
   if (
     !i.settings.suppressScrollX &&
